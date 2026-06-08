@@ -230,9 +230,63 @@ sort(colSums(is.na(dados_train)),
 
 In Python
 
+```{r}
+# Instalando a biblioteca
+reticulate::py_install("pandas")
+```
+
 ```{python}
+# Carregando as bibliotecas ...
 import numpy as np
 import pandas as pd
+
+# Carregando o dataset ...
+dados_train=pd.read_csv("/home/delfos/Documentos/UEPB_20260326/PEDRO_MONTEIRO/CONSULTANCY/CONSULTANCY_PROJECTS/HOUSE_PRICES_PROJECT/DATA/house-prices-advanced-regression-techniques/train.csv")
+
+# Zoiando
+dados_train.head()  #5 primeiras linhas
+
+# Para vê os tipos de dados e se há valores nulos
+dados_train.info()
+
+# Mudando a config p/exibir TODAS as linhas da tabela/série. O pandas esconde com "..."
+pd.set_option("display.max_rows",None)
+
+# Contando quantos NAs
+dados_train.isnull().sum().sort_values(ascending=False)
+#.isnull(): Identifica o que é nulo.
+#.sum(): Soma os valorees or coluna.
+#sort_values(ascending=False): Ordena os valores do maior para o menor.
+
+# Porcentagem dos NAs
+(dados_train.isnull().sum() / len(dados_train) * 100).sort_values(ascending=False)
+```
+
+PoolQC (Qualidade da piscina) = 99.520548% NONE
+
+MiscFeature (Recursos Extras / Diversos) = 96.301370% NONE
+
+Alley (Beco ou Vielas de acesso) = 93.767123% NONE
+
+Fence (Cerca) = 80.753425% NONE
+
+MasVnrType (Revestimento de Alvenaria) = 59.726027% NONE
+
+```         
+FireplaceQu      47.260274
+LotFrontage      17.739726
+GarageQual        5.547945
+GarageFinish      5.547945
+GarageType        5.547945
+GarageYrBlt       5.547945
+GarageCond        5.547945
+BsmtFinType2      2.602740
+BsmtExposure      2.602740
+BsmtCond          2.534247
+BsmtQual          2.534247
+BsmtFinType1      2.534247
+MasVnrArea        0.547945
+Electrical        0.068493
 ```
 
 #### 4.2 Tratamento de outliers
@@ -243,6 +297,36 @@ import pandas as pd
 
 #### 5.1 Tabelas
 
+Para análise inicial escolhemos a variável resposta, Preço de Venda (SalePrice), o tamanho do lote em pés quadrados (LotArea), a capacidade de carros na garagem (GarageCars), e a quantidade de quartos (BedroomAbvGr).
+
+```{python}
+# Selencionando algumas variáveis para análise descritiva inicial
+
+variaveis_primeira_analise=["SalePrice","LotArea","GarageCars","BedroomAbvGr"]
+
+# Criando um dicionário para armazenar as estatísticas
+
+estatisticas={
+  "Média":dados_train[variaveis_primeira_analise].mean(),
+  "Mediana":dados_train[variaveis_primeira_analise].median(),
+  "Desvio Padrão":dados_train[variaveis_primeira_analise].std()
+}
+
+# Criando o DataFrame
+tabela_descritiva=pd.DataFrame(estatisticas)
+print(tabela_descritiva)
+
+# Calculando o coeficiente de variação
+# CV%=(dp/média)*100
+# Criando nova coluna
+tabela_descritiva["CV(%)"]=(tabela_descritiva["Desvio Padrão"]/tabela_descritiva["Média"])*100
+
+# Arredondando p/2 casa decimais
+tabela_descritiva=tabela_descritiva.round(2)
+print(tabela_descritiva)
+
+```
+
 - média
 
 - mediana
@@ -251,9 +335,49 @@ import pandas as pd
 
 - CV (%)
 
-#### 5.2 Gráficos
+#### 5.2 Gráficos  
 
-- histograma
+```{python}
+# Via Bash: pip install pandas numpy matplotlib seaborn scikit-learn
+# Bem mais fácil!
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Configurando o estilo dos gráficos
+sns.set_theme(style="whitegrid")
+#whitegrad: Fundo br c/line de grades
+
+# Colocar os 3 graphics lado a lado
+fig,axes=plt.subplots(1,3,figsize=(18,5))
+#plt.subplots: Vários graphics em uma mesma img.
+#plt.subplots(line,col,tamanhoDaFigura=(largura,altura))
+#fig:Retorne figura
+#axes: array c/3 subplots
+
+# Criando o Histograma
+sns.histplot(dados_train['SalePrice'], kde=False, color='skyblue', ax=axes[0])
+axes[0].set_title('Histograma de SalePrice')
+axes[0].set_xlabel('Preço de Venda ($)')
+axes[0].set_ylabel('Frequência')
+
+# Densidade
+sns.kdeplot(dados_train['SalePrice'], fill=True, color='purple', ax=axes[1])
+axes[1].set_title('Gráfico de Densidade de SalePrice')
+axes[1].set_xlabel('Preço de Venda ($)')
+axes[1].set_ylabel('Densidade')
+
+# Boxplot
+sns.boxplot(y=dados_train['SalePrice'], color='lightgreen', ax=axes[2])
+axes[2].set_title('Boxplot de SalePrice')
+axes[2].set_ylabel('Preço de Venda ($)')
+
+# Ajustando o espaçamento entre os gráficos
+plt.tight_layout()
+plt.show()
+```
+
+#### - histograma
 
 - boxplot
 

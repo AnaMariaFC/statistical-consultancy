@@ -1,0 +1,126 @@
+---
+title: "Pré-Projeto de Consultoria Estatística"
+subtitle: "Análise e Predição de Preços de Imóveis Utilizando Técnicas de Regressão"
+
+author:
+  - "Eduarda da Silva Brito"
+  - "Maria Helena"
+  - "Ana Maria"
+
+date: today
+
+format:
+  html:
+    theme: flatly
+    toc: false
+    number-sections: false
+    code-fold: false
+    self-contained: true
+
+lang: pt-BR
+---
+
+# Introdução
+
+O mercado imobiliário é um setor de grande importância econômica, e o preço de um imóvel depende de diversos fatores, como localização, tamanho, qualidade da construção e estado de conservação. Compreender a influência dessas características é importante tanto para compradores e vendedores quanto para empresas e instituições financeiras.
+
+Com o auxílio de técnicas estatísticas, é possível analisar a relação entre essas variáveis e o preço dos imóveis, além de construir modelos capazes de realizar previsões.
+
+Neste projeto será utilizada a base de dados *House Prices: Advanced Regression Technique*s, disponibilizada na plataforma Kaggle. O objetivo é identificar quais características dos imóveis mais influenciam o preço de venda e desenvolver modelos de regressão para explicar e prever esses valores.
+
+# Base de Dados
+
+A base de dados utilizada neste projeto é proveniente da competição "House Prices: Advanced Regression Techniques", disponível na plataforma Kaggle.
+
+O conjunto de dados tem como objetivo prever o preço de venda de imóveis localizados na cidade de Ames, Iowa (Estados Unidos), utilizando aproximadamente 80 variáveis explicativas relacionadas á estrutura,qualidade, localização e condição dos imóveis.
+
+Os principais arquivos disponibilizados são:
+
+-   train.csv: conjunto de treinamento contendo as variáveis explicativas e a variável resposta;
+-   test.csv: conjunto destinado à realização das previsões;
+-   data_description.txt: descrição completa das variáveis;
+-   sample_submission.csv: exemplo do formato de submissão das previsões.
+
+A variável resposta do estudo é:
+
+-   SalePrice: preço final de venda do imóvel (em dólares).
+
+Entre as principais variáveis explicativas presentes na base, destacam-se:
+
+-   Área do terreno (LotArea);
+-   Bairro (Neighborhood);
+-   Qualidade geral da construção (OverallQual);
+-   Estado geral do imóvel (OverallCond);
+-   Ano de construção (YearBuilt);
+-   Área habitável (GrLivArea);
+-   Número de banheiros (FullBath);
+-   Capacidade da garagem (GarageCars);
+-   Área total do porão (TotalBsmtSF).
+
+# Objetivos
+
+### Objetivo Geral
+
+Analisar os fatores que influenciam o preço de venda de imóveis e construir modelos estatísticos capazes de realizar previsões a partir das características dos imóveis.
+
+### Objetivos Específicos
+
+-   Realizar a limpeza e o tratamento da base de dados;
+-   Fazer uma análise exploratória das variáveis;
+-   Identificar possíveis relações entre as variáveis explicativas e o preço dos imóveis;
+-   Ajustar modelos de regressão para explicar a variável resposta;
+-   Avaliar o desempenho dos modelos por meio de medidas estatísticas;
+-   Interpretar os resultados obtidos e identificar os fatores mais relevantes para a formação do preço dos imóveis.
+
+# Metodologia
+
+O desenvolvimento do projeto será dividido em etapas:
+
+### Etapa 1 — Conhecimento da base de dados
+
+-   Estudo das variáveis;
+-   Identificação dos tipos de dados;
+-   Compreensão do problema proposto.
+
+### Etapa 2 — Tratamento dos dados
+
+-   Identificação de valores ausentes;
+-   Tratamento de dados faltantes;
+-   Identificação de possíveis valores discrepantes (outliers);
+-   Conversão de variáveis categóricas.
+
+### Etapa 3 — Análise Exploratória dos Dados
+
+-   Estatísticas descritivas (média,mediana, desvio padrão, coeficiente de variação);
+-   Tabelas de frequência;
+-   Histogramas;
+-   Boxplots;
+-   Diagramas de dispersão;
+-   Matriz de correlação entre variáveis quantitativas.
+
+### Etapa 4 — Modelagem Estatística
+
+Inicialmente será ajustado um modelo de Regressão Linear Múltipla para explicar a variável SalePrice em função das características dos imóveis.
+
+Em seguida, serão realizadas técnicas de seleção de variáveis (como métodos Stepwise ou outros critérios adequados), com o objetivo de obter um modelo mais parcimonioso e com melhor capacidade preditiva.
+
+Também poderão ser avaliados modelos de regressão mais avançados, visando comparar o desempenho entre diferentes abordagens.
+
+### Etapa 5 — Avaliação dos Modelos
+
+Serão utilizadas medidas como:
+
+-   Coeficiente de determinação (R²);
+-   R² ajustado;
+-   Erro Quadrático Médio (RMSE);
+-   Erro Absoluto Médio (MAE);
+-   Análise gráfica dos resíduos;
+-   Verificação dos pressupostos da regressão;
+-   investigação de observações influentes e possíveis pontos atípicos;
+-   verificação da normalidade dos resíduos.
+
+## Resultados Esperados
+
+Espera-se identificar quais características possuem maior influência sobre o preço dos imóveis e desenvolver um modelo estatístico capaz de realizar previsões com boa precisão.
+
+Além disso, o projeto busca aplicar os conhecimentos adquiridos na disciplina de Consultoria Estatística, integrando análise exploratória, modelagem Estatística e interpretação dos resultados aplicados a um problema real dp mercado imobiliário.

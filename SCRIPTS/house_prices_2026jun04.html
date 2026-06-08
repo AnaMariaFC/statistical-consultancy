@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -207,8 +242,341 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="preparação-dos-dados" class="level3">
 <h3 class="anchored" data-anchor-id="preparação-dos-dados">4. Preparação dos dados</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando os dados ...</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dados_train<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"/home/delfos/Documentos/UEPB_20260326/PEDRO_MONTEIRO/CONSULTANCY/CONSULTANCY_PROJECTS/HOUSE_PRICES_PROJECT/DATA/house-prices-advanced-regression-techniques/train.csv"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando as bibliotecas</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Verificando dimensões da base</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dados_train)  <span class="co">#Number line e col</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1460   81</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dados_train)  <span class="co">#Tipo de variável</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   1460 obs. of  81 variables:
+ $ Id           : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ MSSubClass   : int  60 20 60 70 60 50 20 60 50 190 ...
+ $ MSZoning     : chr  "RL" "RL" "RL" "RL" ...
+ $ LotFrontage  : int  65 80 68 60 84 85 75 NA 51 50 ...
+ $ LotArea      : int  8450 9600 11250 9550 14260 14115 10084 10382 6120 7420 ...
+ $ Street       : chr  "Pave" "Pave" "Pave" "Pave" ...
+ $ Alley        : chr  NA NA NA NA ...
+ $ LotShape     : chr  "Reg" "Reg" "IR1" "IR1" ...
+ $ LandContour  : chr  "Lvl" "Lvl" "Lvl" "Lvl" ...
+ $ Utilities    : chr  "AllPub" "AllPub" "AllPub" "AllPub" ...
+ $ LotConfig    : chr  "Inside" "FR2" "Inside" "Corner" ...
+ $ LandSlope    : chr  "Gtl" "Gtl" "Gtl" "Gtl" ...
+ $ Neighborhood : chr  "CollgCr" "Veenker" "CollgCr" "Crawfor" ...
+ $ Condition1   : chr  "Norm" "Feedr" "Norm" "Norm" ...
+ $ Condition2   : chr  "Norm" "Norm" "Norm" "Norm" ...
+ $ BldgType     : chr  "1Fam" "1Fam" "1Fam" "1Fam" ...
+ $ HouseStyle   : chr  "2Story" "1Story" "2Story" "2Story" ...
+ $ OverallQual  : int  7 6 7 7 8 5 8 7 7 5 ...
+ $ OverallCond  : int  5 8 5 5 5 5 5 6 5 6 ...
+ $ YearBuilt    : int  2003 1976 2001 1915 2000 1993 2004 1973 1931 1939 ...
+ $ YearRemodAdd : int  2003 1976 2002 1970 2000 1995 2005 1973 1950 1950 ...
+ $ RoofStyle    : chr  "Gable" "Gable" "Gable" "Gable" ...
+ $ RoofMatl     : chr  "CompShg" "CompShg" "CompShg" "CompShg" ...
+ $ Exterior1st  : chr  "VinylSd" "MetalSd" "VinylSd" "Wd Sdng" ...
+ $ Exterior2nd  : chr  "VinylSd" "MetalSd" "VinylSd" "Wd Shng" ...
+ $ MasVnrType   : chr  "BrkFace" "None" "BrkFace" "None" ...
+ $ MasVnrArea   : int  196 0 162 0 350 0 186 240 0 0 ...
+ $ ExterQual    : chr  "Gd" "TA" "Gd" "TA" ...
+ $ ExterCond    : chr  "TA" "TA" "TA" "TA" ...
+ $ Foundation   : chr  "PConc" "CBlock" "PConc" "BrkTil" ...
+ $ BsmtQual     : chr  "Gd" "Gd" "Gd" "TA" ...
+ $ BsmtCond     : chr  "TA" "TA" "TA" "Gd" ...
+ $ BsmtExposure : chr  "No" "Gd" "Mn" "No" ...
+ $ BsmtFinType1 : chr  "GLQ" "ALQ" "GLQ" "ALQ" ...
+ $ BsmtFinSF1   : int  706 978 486 216 655 732 1369 859 0 851 ...
+ $ BsmtFinType2 : chr  "Unf" "Unf" "Unf" "Unf" ...
+ $ BsmtFinSF2   : int  0 0 0 0 0 0 0 32 0 0 ...
+ $ BsmtUnfSF    : int  150 284 434 540 490 64 317 216 952 140 ...
+ $ TotalBsmtSF  : int  856 1262 920 756 1145 796 1686 1107 952 991 ...
+ $ Heating      : chr  "GasA" "GasA" "GasA" "GasA" ...
+ $ HeatingQC    : chr  "Ex" "Ex" "Ex" "Gd" ...
+ $ CentralAir   : chr  "Y" "Y" "Y" "Y" ...
+ $ Electrical   : chr  "SBrkr" "SBrkr" "SBrkr" "SBrkr" ...
+ $ X1stFlrSF    : int  856 1262 920 961 1145 796 1694 1107 1022 1077 ...
+ $ X2ndFlrSF    : int  854 0 866 756 1053 566 0 983 752 0 ...
+ $ LowQualFinSF : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ GrLivArea    : int  1710 1262 1786 1717 2198 1362 1694 2090 1774 1077 ...
+ $ BsmtFullBath : int  1 0 1 1 1 1 1 1 0 1 ...
+ $ BsmtHalfBath : int  0 1 0 0 0 0 0 0 0 0 ...
+ $ FullBath     : int  2 2 2 1 2 1 2 2 2 1 ...
+ $ HalfBath     : int  1 0 1 0 1 1 0 1 0 0 ...
+ $ BedroomAbvGr : int  3 3 3 3 4 1 3 3 2 2 ...
+ $ KitchenAbvGr : int  1 1 1 1 1 1 1 1 2 2 ...
+ $ KitchenQual  : chr  "Gd" "TA" "Gd" "Gd" ...
+ $ TotRmsAbvGrd : int  8 6 6 7 9 5 7 7 8 5 ...
+ $ Functional   : chr  "Typ" "Typ" "Typ" "Typ" ...
+ $ Fireplaces   : int  0 1 1 1 1 0 1 2 2 2 ...
+ $ FireplaceQu  : chr  NA "TA" "TA" "Gd" ...
+ $ GarageType   : chr  "Attchd" "Attchd" "Attchd" "Detchd" ...
+ $ GarageYrBlt  : int  2003 1976 2001 1998 2000 1993 2004 1973 1931 1939 ...
+ $ GarageFinish : chr  "RFn" "RFn" "RFn" "Unf" ...
+ $ GarageCars   : int  2 2 2 3 3 2 2 2 2 1 ...
+ $ GarageArea   : int  548 460 608 642 836 480 636 484 468 205 ...
+ $ GarageQual   : chr  "TA" "TA" "TA" "TA" ...
+ $ GarageCond   : chr  "TA" "TA" "TA" "TA" ...
+ $ PavedDrive   : chr  "Y" "Y" "Y" "Y" ...
+ $ WoodDeckSF   : int  0 298 0 0 192 40 255 235 90 0 ...
+ $ OpenPorchSF  : int  61 0 42 35 84 30 57 204 0 4 ...
+ $ EnclosedPorch: int  0 0 0 272 0 0 0 228 205 0 ...
+ $ X3SsnPorch   : int  0 0 0 0 0 320 0 0 0 0 ...
+ $ ScreenPorch  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ PoolArea     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ PoolQC       : chr  NA NA NA NA ...
+ $ Fence        : chr  NA NA NA NA ...
+ $ MiscFeature  : chr  NA NA NA NA ...
+ $ MiscVal      : int  0 0 0 0 0 700 0 350 0 0 ...
+ $ MoSold       : int  2 5 9 2 12 10 8 11 4 1 ...
+ $ YrSold       : int  2008 2007 2008 2006 2008 2009 2007 2009 2008 2008 ...
+ $ SaleType     : chr  "WD" "WD" "WD" "WD" ...
+ $ SaleCondition: chr  "Normal" "Normal" "Normal" "Abnorml" ...
+ $ SalePrice    : int  208500 181500 223500 140000 250000 143000 307000 200000 129900 118000 ...</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dados_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Id           MSSubClass         MSZoning     LotFrontage    
+ Min.   :   1.0   Min.   : 20.0   Length   :1460   Min.   : 21.00  
+ 1st Qu.: 365.8   1st Qu.: 20.0   N.unique :   5   1st Qu.: 59.00  
+ Median : 730.5   Median : 50.0   N.blank  :   0   Median : 69.00  
+ Mean   : 730.5   Mean   : 56.9   Min.nchar:   2   Mean   : 70.05  
+ 3rd Qu.:1095.2   3rd Qu.: 70.0   Max.nchar:   7   3rd Qu.: 80.00  
+ Max.   :1460.0   Max.   :190.0                    Max.   :313.00  
+                                                   NAs    :259     
+    LotArea             Street           Alley           LotShape   
+ Min.   :  1300   Length   :1460   Length   :1460   Length   :1460  
+ 1st Qu.:  7554   N.unique :   2   N.unique :   2   N.unique :   4  
+ Median :  9478   N.blank  :   0   N.blank  :   0   N.blank  :   0  
+ Mean   : 10517   Min.nchar:   4   Min.nchar:   4   Min.nchar:   3  
+ 3rd Qu.: 11602   Max.nchar:   4   Max.nchar:   4   Max.nchar:   3  
+ Max.   :215245                    NAs      :1369                   
+                                                                    
+    LandContour       Utilities        LotConfig        LandSlope   
+ Length   :1460   Length   :1460   Length   :1460   Length   :1460  
+ N.unique :   4   N.unique :   2   N.unique :   5   N.unique :   3  
+ N.blank  :   0   N.blank  :   0   N.blank  :   0   N.blank  :   0  
+ Min.nchar:   3   Min.nchar:   6   Min.nchar:   3   Min.nchar:   3  
+ Max.nchar:   3   Max.nchar:   6   Max.nchar:   7   Max.nchar:   3  
+                                                                    
+                                                                    
+    Neighborhood      Condition1       Condition2        BldgType   
+ Length   :1460   Length   :1460   Length   :1460   Length   :1460  
+ N.unique :  25   N.unique :   9   N.unique :   8   N.unique :   5  
+ N.blank  :   0   N.blank  :   0   N.blank  :   0   N.blank  :   0  
+ Min.nchar:   5   Min.nchar:   4   Min.nchar:   4   Min.nchar:   4  
+ Max.nchar:   7   Max.nchar:   6   Max.nchar:   6   Max.nchar:   6  
+                                                                    
+                                                                    
+     HouseStyle    OverallQual      OverallCond      YearBuilt   
+ Length   :1460   Min.   : 1.000   Min.   :1.000   Min.   :1872  
+ N.unique :   8   1st Qu.: 5.000   1st Qu.:5.000   1st Qu.:1954  
+ N.blank  :   0   Median : 6.000   Median :5.000   Median :1973  
+ Min.nchar:   4   Mean   : 6.099   Mean   :5.575   Mean   :1971  
+ Max.nchar:   6   3rd Qu.: 7.000   3rd Qu.:6.000   3rd Qu.:2000  
+                  Max.   :10.000   Max.   :9.000   Max.   :2010  
+                                                                 
+  YearRemodAdd      RoofStyle         RoofMatl       Exterior1st  
+ Min.   :1950   Length   :1460   Length   :1460   Length   :1460  
+ 1st Qu.:1967   N.unique :   6   N.unique :   8   N.unique :  15  
+ Median :1994   N.blank  :   0   N.blank  :   0   N.blank  :   0  
+ Mean   :1985   Min.nchar:   3   Min.nchar:   4   Min.nchar:   5  
+ 3rd Qu.:2004   Max.nchar:   7   Max.nchar:   7   Max.nchar:   7  
+ Max.   :2010                                                     
+                                                                  
+    Exterior2nd       MasVnrType     MasVnrArea         ExterQual   
+ Length   :1460   Length   :1460   Min.   :   0.0   Length   :1460  
+ N.unique :  16   N.unique :   4   1st Qu.:   0.0   N.unique :   4  
+ N.blank  :   0   N.blank  :   0   Median :   0.0   N.blank  :   0  
+ Min.nchar:   5   Min.nchar:   4   Mean   : 103.7   Min.nchar:   2  
+ Max.nchar:   7   Max.nchar:   7   3rd Qu.: 166.0   Max.nchar:   2  
+                  NAs      :   8   Max.   :1600.0                   
+                                   NAs    :8                        
+     ExterCond        Foundation        BsmtQual         BsmtCond   
+ Length   :1460   Length   :1460   Length   :1460   Length   :1460  
+ N.unique :   5   N.unique :   6   N.unique :   4   N.unique :   4  
+ N.blank  :   0   N.blank  :   0   N.blank  :   0   N.blank  :   0  
+ Min.nchar:   2   Min.nchar:   4   Min.nchar:   2   Min.nchar:   2  
+ Max.nchar:   2   Max.nchar:   6   Max.nchar:   2   Max.nchar:   2  
+                                   NAs      :  37   NAs      :  37  
+                                                                    
+    BsmtExposure     BsmtFinType1    BsmtFinSF1        BsmtFinType2 
+ Length   :1460   Length   :1460   Min.   :   0.0   Length   :1460  
+ N.unique :   4   N.unique :   6   1st Qu.:   0.0   N.unique :   6  
+ N.blank  :   0   N.blank  :   0   Median : 383.5   N.blank  :   0  
+ Min.nchar:   2   Min.nchar:   3   Mean   : 443.6   Min.nchar:   3  
+ Max.nchar:   2   Max.nchar:   3   3rd Qu.: 712.2   Max.nchar:   3  
+ NAs      :  38   NAs      :  37   Max.   :5644.0   NAs      :  38  
+                                                                    
+   BsmtFinSF2        BsmtUnfSF       TotalBsmtSF          Heating    
+ Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Length   :1460  
+ 1st Qu.:   0.00   1st Qu.: 223.0   1st Qu.: 795.8   N.unique :   6  
+ Median :   0.00   Median : 477.5   Median : 991.5   N.blank  :   0  
+ Mean   :  46.55   Mean   : 567.2   Mean   :1057.4   Min.nchar:   4  
+ 3rd Qu.:   0.00   3rd Qu.: 808.0   3rd Qu.:1298.2   Max.nchar:   5  
+ Max.   :1474.00   Max.   :2336.0   Max.   :6110.0                   
+                                                                     
+     HeatingQC        CentralAir       Electrical     X1stFlrSF   
+ Length   :1460   Length   :1460   Length   :1460   Min.   : 334  
+ N.unique :   5   N.unique :   2   N.unique :   5   1st Qu.: 882  
+ N.blank  :   0   N.blank  :   0   N.blank  :   0   Median :1087  
+ Min.nchar:   2   Min.nchar:   1   Min.nchar:   3   Mean   :1163  
+ Max.nchar:   2   Max.nchar:   1   Max.nchar:   5   3rd Qu.:1391  
+                                   NAs      :   1   Max.   :4692  
+                                                                  
+   X2ndFlrSF     LowQualFinSF       GrLivArea     BsmtFullBath   
+ Min.   :   0   Min.   :  0.000   Min.   : 334   Min.   :0.0000  
+ 1st Qu.:   0   1st Qu.:  0.000   1st Qu.:1130   1st Qu.:0.0000  
+ Median :   0   Median :  0.000   Median :1464   Median :0.0000  
+ Mean   : 347   Mean   :  5.845   Mean   :1515   Mean   :0.4253  
+ 3rd Qu.: 728   3rd Qu.:  0.000   3rd Qu.:1777   3rd Qu.:1.0000  
+ Max.   :2065   Max.   :572.000   Max.   :5642   Max.   :3.0000  
+                                                                 
+  BsmtHalfBath        FullBath        HalfBath       BedroomAbvGr  
+ Min.   :0.00000   Min.   :0.000   Min.   :0.0000   Min.   :0.000  
+ 1st Qu.:0.00000   1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:2.000  
+ Median :0.00000   Median :2.000   Median :0.0000   Median :3.000  
+ Mean   :0.05753   Mean   :1.565   Mean   :0.3829   Mean   :2.866  
+ 3rd Qu.:0.00000   3rd Qu.:2.000   3rd Qu.:1.0000   3rd Qu.:3.000  
+ Max.   :2.00000   Max.   :3.000   Max.   :2.0000   Max.   :8.000  
+                                                                   
+  KitchenAbvGr      KitchenQual    TotRmsAbvGrd        Functional  
+ Min.   :0.000   Length   :1460   Min.   : 2.000   Length   :1460  
+ 1st Qu.:1.000   N.unique :   4   1st Qu.: 5.000   N.unique :   7  
+ Median :1.000   N.blank  :   0   Median : 6.000   N.blank  :   0  
+ Mean   :1.047   Min.nchar:   2   Mean   : 6.518   Min.nchar:   3  
+ 3rd Qu.:1.000   Max.nchar:   2   3rd Qu.: 7.000   Max.nchar:   4  
+ Max.   :3.000                    Max.   :14.000                   
+                                                                   
+   Fireplaces       FireplaceQu       GarageType    GarageYrBlt  
+ Min.   :0.000   Length   :1460   Length   :1460   Min.   :1900  
+ 1st Qu.:0.000   N.unique :   5   N.unique :   6   1st Qu.:1961  
+ Median :1.000   N.blank  :   0   N.blank  :   0   Median :1980  
+ Mean   :0.613   Min.nchar:   2   Min.nchar:   6   Mean   :1979  
+ 3rd Qu.:1.000   Max.nchar:   2   Max.nchar:   7   3rd Qu.:2002  
+ Max.   :3.000   NAs      : 690   NAs      :  81   Max.   :2010  
+                                                   NAs    :81    
+    GarageFinish    GarageCars      GarageArea         GarageQual  
+ Length   :1460   Min.   :0.000   Min.   :   0.0   Length   :1460  
+ N.unique :   3   1st Qu.:1.000   1st Qu.: 334.5   N.unique :   5  
+ N.blank  :   0   Median :2.000   Median : 480.0   N.blank  :   0  
+ Min.nchar:   3   Mean   :1.767   Mean   : 473.0   Min.nchar:   2  
+ Max.nchar:   3   3rd Qu.:2.000   3rd Qu.: 576.0   Max.nchar:   2  
+ NAs      :  81   Max.   :4.000   Max.   :1418.0   NAs      :  81  
+                                                                   
+     GarageCond       PavedDrive     WoodDeckSF      OpenPorchSF    
+ Length   :1460   Length   :1460   Min.   :  0.00   Min.   :  0.00  
+ N.unique :   5   N.unique :   3   1st Qu.:  0.00   1st Qu.:  0.00  
+ N.blank  :   0   N.blank  :   0   Median :  0.00   Median : 25.00  
+ Min.nchar:   2   Min.nchar:   1   Mean   : 94.24   Mean   : 46.66  
+ Max.nchar:   2   Max.nchar:   1   3rd Qu.:168.00   3rd Qu.: 68.00  
+ NAs      :  81                    Max.   :857.00   Max.   :547.00  
+                                                                    
+ EnclosedPorch      X3SsnPorch      ScreenPorch        PoolArea      
+ Min.   :  0.00   Min.   :  0.00   Min.   :  0.00   Min.   :  0.000  
+ 1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.:  0.000  
+ Median :  0.00   Median :  0.00   Median :  0.00   Median :  0.000  
+ Mean   : 21.95   Mean   :  3.41   Mean   : 15.06   Mean   :  2.759  
+ 3rd Qu.:  0.00   3rd Qu.:  0.00   3rd Qu.:  0.00   3rd Qu.:  0.000  
+ Max.   :552.00   Max.   :508.00   Max.   :480.00   Max.   :738.000  
+                                                                     
+       PoolQC           Fence         MiscFeature      MiscVal        
+ Length   :1460   Length   :1460   Length   :1460   Min.   :    0.00  
+ N.unique :   3   N.unique :   4   N.unique :   4   1st Qu.:    0.00  
+ N.blank  :   0   N.blank  :   0   N.blank  :   0   Median :    0.00  
+ Min.nchar:   2   Min.nchar:   4   Min.nchar:   4   Mean   :   43.49  
+ Max.nchar:   2   Max.nchar:   5   Max.nchar:   4   3rd Qu.:    0.00  
+ NAs      :1453   NAs      :1179   NAs      :1406   Max.   :15500.00  
+                                                                      
+     MoSold           YrSold          SaleType      SaleCondition 
+ Min.   : 1.000   Min.   :2006   Length   :1460   Length   :1460  
+ 1st Qu.: 5.000   1st Qu.:2007   N.unique :   9   N.unique :   6  
+ Median : 6.000   Median :2008   N.blank  :   0   N.blank  :   0  
+ Mean   : 6.322   Mean   :2008   Min.nchar:   2   Min.nchar:   6  
+ 3rd Qu.: 8.000   3rd Qu.:2009   Max.nchar:   5   Max.nchar:   7  
+ Max.   :12.000   Max.   :2010                                    
+                                                                  
+   SalePrice     
+ Min.   : 34900  
+ 1st Qu.:129975  
+ Median :163000  
+ Mean   :180921  
+ 3rd Qu.:214000  
+ Max.   :755000  
+                 </code></pre>
+</div>
+</div>
 <section id="dados-faltantes" class="level4">
 <h4 class="anchored" data-anchor-id="dados-faltantes">4.1 Dados faltantes</h4>
+<p>Aqui os dados com <em>NA</em>s são dados onde a casa não tem garagem, ou cerca, ou piscina. <em>Não</em> são dados incompletos. Logo, não se usa o ajuste substituindo os dados pela média ou mediana. Mas substituindo <em>NA</em> por <em>“None”</em> em variáveis categóricas. E <em>NA</em> por 0, em variáveis numéricas.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenando os dados faltantes</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(dados_train)),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">decreasing=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       PoolQC   MiscFeature         Alley         Fence   FireplaceQu 
+         1453          1406          1369          1179           690 
+  LotFrontage    GarageType   GarageYrBlt  GarageFinish    GarageQual 
+          259            81            81            81            81 
+   GarageCond  BsmtExposure  BsmtFinType2      BsmtQual      BsmtCond 
+           81            38            38            37            37 
+ BsmtFinType1    MasVnrType    MasVnrArea    Electrical            Id 
+           37             8             8             1             0 
+   MSSubClass      MSZoning       LotArea        Street      LotShape 
+            0             0             0             0             0 
+  LandContour     Utilities     LotConfig     LandSlope  Neighborhood 
+            0             0             0             0             0 
+   Condition1    Condition2      BldgType    HouseStyle   OverallQual 
+            0             0             0             0             0 
+  OverallCond     YearBuilt  YearRemodAdd     RoofStyle      RoofMatl 
+            0             0             0             0             0 
+  Exterior1st   Exterior2nd     ExterQual     ExterCond    Foundation 
+            0             0             0             0             0 
+   BsmtFinSF1    BsmtFinSF2     BsmtUnfSF   TotalBsmtSF       Heating 
+            0             0             0             0             0 
+    HeatingQC    CentralAir     X1stFlrSF     X2ndFlrSF  LowQualFinSF 
+            0             0             0             0             0 
+    GrLivArea  BsmtFullBath  BsmtHalfBath      FullBath      HalfBath 
+            0             0             0             0             0 
+ BedroomAbvGr  KitchenAbvGr   KitchenQual  TotRmsAbvGrd    Functional 
+            0             0             0             0             0 
+   Fireplaces    GarageCars    GarageArea    PavedDrive    WoodDeckSF 
+            0             0             0             0             0 
+  OpenPorchSF EnclosedPorch    X3SsnPorch   ScreenPorch      PoolArea 
+            0             0             0             0             0 
+      MiscVal        MoSold        YrSold      SaleType SaleCondition 
+            0             0             0             0             0 
+    SalePrice 
+            0 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#is.na(): Cria uma matriz de TRUE (onde falta dados) e FALSE (onde o dado existe).</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#colSums(): Soma os valores por coluna. Como o R entende TRUE como 1 e FALSE como 0,essa soma resulta no total de dados faltantes.</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#sort(..., decreasing = TRUE): Pega a lista de contagem de NAs e a organiza em ordem decrescente (do maior para o menor).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 </section>
 <section id="tratamento-de-outliers" class="level4">
 <h4 class="anchored" data-anchor-id="tratamento-de-outliers">4.2 Tratamento de outliers</h4>
