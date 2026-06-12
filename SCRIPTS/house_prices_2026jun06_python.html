@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ana Maria F Costa">
+<meta name="author" content="Eduarda da Silva Brito">
+<meta name="author" content="Maria Helena Ramos de Macedo">
+
+<title>House Prices - kaggle</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="house_prices_2026jun06_python_files/libs/clipboard/clipboard.min.js"></script>
+<script src="house_prices_2026jun06_python_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="house_prices_2026jun06_python_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="house_prices_2026jun06_python_files/libs/quarto-html/popper.min.js"></script>
+<script src="house_prices_2026jun06_python_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="house_prices_2026jun06_python_files/libs/quarto-html/anchor.min.js"></script>
+<link href="house_prices_2026jun06_python_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="house_prices_2026jun06_python_files/libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="house_prices_2026jun06_python_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="house_prices_2026jun06_python_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="house_prices_2026jun06_python_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introdução-e-contextualização-do-problema" id="toc-introdução-e-contextualização-do-problema" class="nav-link active" data-scroll-target="#introdução-e-contextualização-do-problema">1. Introdução e contextualização do problema</a></li>
+  <li><a href="#fundamentação-teórica" id="toc-fundamentação-teórica" class="nav-link" data-scroll-target="#fundamentação-teórica">2. Fundamentação Teórica</a></li>
+  <li><a href="#descrição-da-base-de-dados" id="toc-descrição-da-base-de-dados" class="nav-link" data-scroll-target="#descrição-da-base-de-dados">3. Descrição da base de dados</a></li>
+  <li><a href="#preparação-dos-dados" id="toc-preparação-dos-dados" class="nav-link" data-scroll-target="#preparação-dos-dados">4. Preparação dos dados</a></li>
+  <li><a href="#estatística-descritiva" id="toc-estatística-descritiva" class="nav-link" data-scroll-target="#estatística-descritiva">5. Estatística Descritiva</a></li>
+  <li><a href="#análise-exploratória" id="toc-análise-exploratória" class="nav-link" data-scroll-target="#análise-exploratória">6. Análise exploratória</a></li>
+  <li><a href="#modelagem-estatística" id="toc-modelagem-estatística" class="nav-link" data-scroll-target="#modelagem-estatística">7. Modelagem estatística</a></li>
+  <li><a href="#diagnóstico-do-modelo" id="toc-diagnóstico-do-modelo" class="nav-link" data-scroll-target="#diagnóstico-do-modelo">8. Diagnóstico do modelo</a></li>
+  <li><a href="#seleção-do-melhor-modelo" id="toc-seleção-do-melhor-modelo" class="nav-link" data-scroll-target="#seleção-do-melhor-modelo">9. Seleção do melhor modelo</a></li>
+  <li><a href="#discursão-dos-resultados" id="toc-discursão-dos-resultados" class="nav-link" data-scroll-target="#discursão-dos-resultados">10. Discursão dos resultados</a></li>
+  <li><a href="#conclusões" id="toc-conclusões" class="nav-link" data-scroll-target="#conclusões">11. Conclusões</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">12. Referências</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">House Prices - kaggle</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p><em>Ana Maria F Costa</em> </p>
+             <p><em>Eduarda da Silva Brito</em> </p>
+             <p><em>Maria Helena Ramos de Macedo</em> </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução-e-contextualização-do-problema" class="level3">
+<h3 class="anchored" data-anchor-id="introdução-e-contextualização-do-problema">1. Introdução e contextualização do problema</h3>
+<section id="objetivo-geral" class="level4">
+<h4 class="anchored" data-anchor-id="objetivo-geral">1.1 Objetivo geral</h4>
+<p>Analisar os fatores determinantes na precificação de imóveis residenciais utilizando modelagem estatística, a fim de ajudar as imobiliarias a determinar os preços dos imóveis.</p>
+</section>
+<section id="objetivo-específico" class="level4">
+<h4 class="anchored" data-anchor-id="objetivo-específico">1.2 Objetivo específico</h4>
+<ul>
+<li><p>Identificar e quantificar a relação entre a área construída e o preço de venda.</p></li>
+<li><p>Avaliar o impacto da localização e da proximidade do centro no valor dos imóveis.</p></li>
+<li><p>Desenvolver um modelo de regressão linear múltiplo com alto poder explicativo e diagnosticar suas suposições.</p></li>
+</ul>
+</section>
+</section>
+<section id="fundamentação-teórica" class="level3">
+<h3 class="anchored" data-anchor-id="fundamentação-teórica">2. Fundamentação Teórica</h3>
+<section id="regressão-linear-múltipla" class="level4">
+<h4 class="anchored" data-anchor-id="regressão-linear-múltipla">2.1 Regressão Linear Múltipla</h4>
+</section>
+<section id="precificação-hedônica" class="level4">
+<h4 class="anchored" data-anchor-id="precificação-hedônica">2.2 Precificação Hedônica</h4>
+</section>
+</section>
+<section id="descrição-da-base-de-dados" class="level3">
+<h3 class="anchored" data-anchor-id="descrição-da-base-de-dados">3. Descrição da base de dados</h3>
+<ul>
+<li><p><strong>SalePrice (Preço de Venda)</strong> - the property’s sale price in dollars. This is the target variable that you’re trying to predict. (o preço de venda do imóvel em dólares. Esta é a variável alvo que você está tentando prever.)</p></li>
+<li><p><strong>MSSubClass</strong>: The building class (Classe do edifício)</p></li>
+<li><p><strong>MSZoning</strong>: The general zoning classification (Classificação geral de zoneamento)</p></li>
+<li><p><strong>LotFrontage</strong>: Linear feet of street connected to property (Metros lineares de rua conectados à propriedade)</p></li>
+<li><p><strong>LotArea</strong>: Lot size in square feet (Tamonho do lote em pés quadrados)</p></li>
+<li><p><strong>Street</strong>: Type of road access (Tipo de acesso viário)</p></li>
+<li><p><strong>Alley</strong>: Type of alley access (Tipo de acesso por viela)</p></li>
+<li><p><strong>LotShape</strong>: General shape of property (Formato geral da propriedade)</p></li>
+<li><p><strong>LandContour</strong>: Flatness of the property (Planicidade da propriedade)</p></li>
+<li><p><strong>Utilities</strong>: Type of utilities available (Tipo de serviços públicos disponíveis)</p></li>
+<li><p><strong>LotConfig</strong>: Lot configuration (Configuração do lote)</p></li>
+<li><p><strong>LandSlope</strong>: Slope of property (Inclinação da propriedade)</p></li>
+<li><p><strong>Neighborhood</strong>: Physical locations within Ames city limits (Localização física dentro dos limites da cidade de Ames)</p></li>
+<li><p><strong>Condition1</strong>: Proximity to main road or railroad (Proximidade à estrada principal ou ferrovia)</p></li>
+<li><p><strong>Condition2</strong>: Proximity to main road or railroad (if a second is present) (Proximidade à estrada principal ou ferrovia - se houver uma segunda)</p></li>
+<li><p><strong>BldgType</strong>: Type of dwelling (Tipo de residência)</p></li>
+<li><p><strong>HouseStyle</strong>: Style of dwelling (Estilo de residência)</p></li>
+<li><p><strong>OverallQual</strong>: Overall material and finish quality (Qualidade geral do material e acabamento)</p></li>
+<li><p><strong>OverallCond</strong>: Overall condition rating (Classificação geral da condição)</p></li>
+<li><p><strong>YearBuilt</strong>: Original construction date (Data de construção original)</p></li>
+<li><p><strong>YearRemodAdd</strong>: Remodel date (Data da última reforma)</p></li>
+<li><p><strong>RoofStyle</strong>: Type of roof (Tipo de telhado)</p></li>
+<li><p><strong>RoofMatl</strong>: Roof material (Material do telhado)</p></li>
+<li><p><strong>Exterior1st</strong>: Exterior covering on house (Revestimento externo da casa)</p></li>
+<li><p><strong>Exterior2nd</strong>: Exterior covering on house (if more than one material) (Rev ext da casa se houver mais de um material)</p></li>
+<li><p><strong>MasVnrType</strong>: Masonry veneer type (Tipo de revestimento de alvenaria)</p></li>
+<li><p><strong>MasVnrArea</strong>: Masonry veneer area in square feet (Área de revestimento de alvenaria em pés quadrados)</p></li>
+<li><p><strong>ExterQual</strong>: Exterior material quality (Qualidade do material externo)</p></li>
+<li><p><strong>ExterCond</strong>: Present condition of the material on the exterior (Condição atual do material no exterior)</p></li>
+<li><p><strong>Foundation</strong>: Type of foundation (Tipo de fundação)</p></li>
+<li><p><strong>BsmtQual</strong>: Height of the basement (Altura do porão)</p></li>
+<li><p><strong>BsmtCond</strong>: General condition of the basement (Condição geral do porão)</p></li>
+<li><p><strong>BsmtExposure</strong>: Walkout or garden level basement walls (Paredes do porão com saída para o jardim ou nível do jardim)</p></li>
+<li><p><strong>BsmtFinType1</strong>: Quality of basement finished area (Qualidade da área acabada do porão)</p></li>
+<li><p><strong>BsmtFinSF1</strong>: Type 1 finished square feet (Área acabada do tipo 1 em pés quadrados)</p></li>
+<li><p><strong>BsmtFinType2</strong>: Quality of second finished area (if present) (Qualidade da segunda área acabada - se houver)</p></li>
+<li><p><strong>BsmtFinSF2</strong>: Type 2 finished square feet (Área acabada do tipo 2 em pés quadrados)</p></li>
+<li><p><strong>BsmtUnfSF</strong>: Unfinished square feet of basement area (Área inacabada do porão em pés quadrados)</p></li>
+<li><p><strong>TotalBsmtSF</strong>: Total square feet of basement area (Área total do porão em pés quadrados)</p></li>
+<li><p><strong>Heating</strong>: Type of heating (Tipo de aquecimento)</p></li>
+<li><p><strong>HeatingQC</strong>: Heating quality and condition (Qualidade e condição do aquecimento)</p></li>
+<li><p><strong>CentralAir</strong>: Central air conditioning (Ar condicionado central)</p></li>
+<li><p><strong>Electrical</strong>: Electrical system (Sistema elétrico)</p></li>
+<li><p><strong>1stFlrSF</strong>: First Floor square feet (Área do primeiro andar)</p></li>
+<li><p><strong>2ndFlrSF</strong>: Second floor square feet (Área do segunda andar)</p></li>
+<li><p><strong>LowQualFinSF</strong>: Low quality finished square feet (all floors) (Área acabada de baia qualidade - todos os andares)</p></li>
+<li><p><strong>GrLivArea</strong>: Above grade (ground) living area square feet (Área habitável acima do nível do solo)</p></li>
+<li><p><strong>BsmtFullBath</strong>: Basement full bathrooms (Banheiros completos no subsolo)</p></li>
+<li><p><strong>BsmtHalfBath</strong>: Basement half bathrooms (Lavabos no subsolo)</p></li>
+<li><p><strong>FullBath</strong>: Full bathrooms above grade (Banheiros completos acima do nível do solo)</p></li>
+<li><p><strong>HalfBath</strong>: Half baths above grade (Lavabos acima do nível do solo)</p></li>
+<li><p><strong>Bedroom</strong>: Number of bedrooms above basement level (Número de quartos acima do nível do solo)</p></li>
+<li><p><strong>Kitchen</strong>: Number of kitchens (Números de cozinhas)</p></li>
+<li><p><strong>KitchenQual</strong>: Kitchen quality (Qualidade da cozinha)</p></li>
+<li><p><strong>TotRmsAbvGrd</strong>: Total rooms above grade (does not include bathrooms) (Total de cômodos acima do nível do solo - NÃO inclui banheiros)</p></li>
+<li><p><strong>Functional</strong>: Home functionality rating (Classificação da funcionalidade da casa)</p></li>
+<li><p><strong>Fireplaces</strong>: Number of fireplaces (Lareiras)</p></li>
+<li><p><strong>FireplaceQu</strong>: Fireplace quality (Qualidade da lareira)</p></li>
+<li><p><strong>GarageType</strong>: Garage location (Localização da garagem)</p></li>
+<li><p><strong>GarageYrBlt</strong>: Year garage was built (Ano de construção da garagem)</p></li>
+<li><p><strong>GarageFinish</strong>: Interior finish of the garage (Acabamento interno da garagem)</p></li>
+<li><p><strong>GarageCars</strong>: Size of garage in car capacity (Tamanho da garagem em carros - capacidade)</p></li>
+<li><p><strong>GarageArea</strong>: Size of garage in square feet (Tamanho da garagem em pés quadrados)</p></li>
+<li><p><strong>GarageQual</strong>: Garage quality (Qualidade da garagem)</p></li>
+<li><p><strong>GarageCond</strong>: Garage condition (Condição da garagem)</p></li>
+<li><p><strong>PavedDrive</strong>: Paved driveway (Entrada pavimentada)</p></li>
+<li><p><strong>WoodDeckSF</strong>: Wood deck area in square feet (Área do deck de madeira em pés quadrados)</p></li>
+<li><p><strong>OpenPorchSF</strong>: Open porch area in square feet (Área da varanda aberta em pés quadrados)</p></li>
+<li><p><strong>EnclosedPorch</strong>: Enclosed porch area in square feet (Área da varanda fechada em pés quadrados)</p></li>
+<li><p><strong>3SsnPorch</strong>: Three season porch area in square feet (Área da varanda de três estações em pés quadrados)</p></li>
+<li><p><strong>ScreenPorch</strong>: Screen porch area in square feet (Área da varanda telada em pés quadrados )</p></li>
+<li><p><strong>PoolArea</strong>: Pool area in square feet (Área da piscina em pés quadrados)</p></li>
+<li><p><strong>PoolQC</strong>: Pool quality (Qualidade da piscina)</p></li>
+<li><p><strong>Fence</strong>: Fence quality (Qualidade da cerca)</p></li>
+<li><p><strong>MiscFeature</strong>: Miscellaneous feature not covered in other categories (Característica diversa não coberta em outras categorias)</p></li>
+<li><p><strong>MiscVal</strong>: $Value of miscellaneous feature (Valor da característica diversa)</p></li>
+<li><p><strong>MoSold</strong>: Month Sold (Mês da venda)</p></li>
+<li><p><strong>YrSold</strong>: Year Sold (Ano da venda)</p></li>
+<li><p><strong>SaleType</strong>: Type of sale (Tipo de venda)</p></li>
+<li><p><strong>SaleCondition</strong>: Condition of sale (Condição da venda)</p></li>
+</ul>
+</section>
+<section id="preparação-dos-dados" class="level3">
+<h3 class="anchored" data-anchor-id="preparação-dos-dados">4. Preparação dos dados</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalando o ambiente Python</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Depois disso dá para misturar o R com o Python</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>reticulate<span class="sc">::</span><span class="fu">py_install</span>(<span class="st">"ipython"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using virtual environment '/home/delfos/.virtualenvs/r-reticulate' ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>+ /home/delfos/.virtualenvs/r-reticulate/bin/python -m pip install --upgrade --no-user ipython</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">repl_python</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Python 3.14.5 (/home/delfos/.virtualenvs/r-reticulate/bin/python)
+Reticulate 1.46.0 REPL -- A Python interpreter in R.
+Enter 'exit' or 'quit' to exit the REPL and return to R.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exit</code></pre>
+</div>
+</div>
+<section id="dados-faltantes" class="level4">
+<h4 class="anchored" data-anchor-id="dados-faltantes">4.1 Dados faltantes</h4>
+<p>Aqui os dados com <em>NA</em>s são dados onde a casa não tem garagem, ou cerca, ou piscina. <em>Não</em> são dados incompletos. Logo, não se usa o ajuste substituindo os dados pela média ou mediana. Mas substituindo <em>NA</em> por <em>“None”</em> em variáveis categóricas. E <em>NA</em> por 0, em variáveis numéricas.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando as bibliotecas ...</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando o dataset ...</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>dados_train<span class="op">=</span>pd.read_csv(<span class="st">"/home/delfos/Documentos/UEPB_20260326/PEDRO_MONTEIRO/CONSULTANCY/CONSULTANCY_PROJECTS/HOUSE_PRICES_PROJECT/DATA/house-prices-advanced-regression-techniques/train.csv"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Zoiando</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>dados_train.head()  <span class="co">#5 primeiras linhas</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Id  MSSubClass MSZoning  ...  SaleType  SaleCondition SalePrice
+0   1          60       RL  ...        WD         Normal    208500
+1   2          20       RL  ...        WD         Normal    181500
+2   3          60       RL  ...        WD         Normal    223500
+3   4          70       RL  ...        WD        Abnorml    140000
+4   5          60       RL  ...        WD         Normal    250000
+
+[5 rows x 81 columns]</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Para vê os tipos de dados e se há valores nulos</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dados_train.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.DataFrame'&gt;
+RangeIndex: 1460 entries, 0 to 1459
+Data columns (total 81 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   Id             1460 non-null   int64  
+ 1   MSSubClass     1460 non-null   int64  
+ 2   MSZoning       1460 non-null   str    
+ 3   LotFrontage    1201 non-null   float64
+ 4   LotArea        1460 non-null   int64  
+ 5   Street         1460 non-null   str    
+ 6   Alley          91 non-null     str    
+ 7   LotShape       1460 non-null   str    
+ 8   LandContour    1460 non-null   str    
+ 9   Utilities      1460 non-null   str    
+ 10  LotConfig      1460 non-null   str    
+ 11  LandSlope      1460 non-null   str    
+ 12  Neighborhood   1460 non-null   str    
+ 13  Condition1     1460 non-null   str    
+ 14  Condition2     1460 non-null   str    
+ 15  BldgType       1460 non-null   str    
+ 16  HouseStyle     1460 non-null   str    
+ 17  OverallQual    1460 non-null   int64  
+ 18  OverallCond    1460 non-null   int64  
+ 19  YearBuilt      1460 non-null   int64  
+ 20  YearRemodAdd   1460 non-null   int64  
+ 21  RoofStyle      1460 non-null   str    
+ 22  RoofMatl       1460 non-null   str    
+ 23  Exterior1st    1460 non-null   str    
+ 24  Exterior2nd    1460 non-null   str    
+ 25  MasVnrType     588 non-null    str    
+ 26  MasVnrArea     1452 non-null   float64
+ 27  ExterQual      1460 non-null   str    
+ 28  ExterCond      1460 non-null   str    
+ 29  Foundation     1460 non-null   str    
+ 30  BsmtQual       1423 non-null   str    
+ 31  BsmtCond       1423 non-null   str    
+ 32  BsmtExposure   1422 non-null   str    
+ 33  BsmtFinType1   1423 non-null   str    
+ 34  BsmtFinSF1     1460 non-null   int64  
+ 35  BsmtFinType2   1422 non-null   str    
+ 36  BsmtFinSF2     1460 non-null   int64  
+ 37  BsmtUnfSF      1460 non-null   int64  
+ 38  TotalBsmtSF    1460 non-null   int64  
+ 39  Heating        1460 non-null   str    
+ 40  HeatingQC      1460 non-null   str    
+ 41  CentralAir     1460 non-null   str    
+ 42  Electrical     1459 non-null   str    
+ 43  1stFlrSF       1460 non-null   int64  
+ 44  2ndFlrSF       1460 non-null   int64  
+ 45  LowQualFinSF   1460 non-null   int64  
+ 46  GrLivArea      1460 non-null   int64  
+ 47  BsmtFullBath   1460 non-null   int64  
+ 48  BsmtHalfBath   1460 non-null   int64  
+ 49  FullBath       1460 non-null   int64  
+ 50  HalfBath       1460 non-null   int64  
+ 51  BedroomAbvGr   1460 non-null   int64  
+ 52  KitchenAbvGr   1460 non-null   int64  
+ 53  KitchenQual    1460 non-null   str    
+ 54  TotRmsAbvGrd   1460 non-null   int64  
+ 55  Functional     1460 non-null   str    
+ 56  Fireplaces     1460 non-null   int64  
+ 57  FireplaceQu    770 non-null    str    
+ 58  GarageType     1379 non-null   str    
+ 59  GarageYrBlt    1379 non-null   float64
+ 60  GarageFinish   1379 non-null   str    
+ 61  GarageCars     1460 non-null   int64  
+ 62  GarageArea     1460 non-null   int64  
+ 63  GarageQual     1379 non-null   str    
+ 64  GarageCond     1379 non-null   str    
+ 65  PavedDrive     1460 non-null   str    
+ 66  WoodDeckSF     1460 non-null   int64  
+ 67  OpenPorchSF    1460 non-null   int64  
+ 68  EnclosedPorch  1460 non-null   int64  
+ 69  3SsnPorch      1460 non-null   int64  
+ 70  ScreenPorch    1460 non-null   int64  
+ 71  PoolArea       1460 non-null   int64  
+ 72  PoolQC         7 non-null      str    
+ 73  Fence          281 non-null    str    
+ 74  MiscFeature    54 non-null     str    
+ 75  MiscVal        1460 non-null   int64  
+ 76  MoSold         1460 non-null   int64  
+ 77  YrSold         1460 non-null   int64  
+ 78  SaleType       1460 non-null   str    
+ 79  SaleCondition  1460 non-null   str    
+ 80  SalePrice      1460 non-null   int64  
+dtypes: float64(3), int64(35), str(43)
+memory usage: 924.0 KB</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mudando a config p/exibir TODAS as linhas da tabela/série. O pandas esconde com "..."</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>,<span class="va">None</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Contando quantos NAs</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dados_train.isnull().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>PoolQC           1453
+MiscFeature      1406
+Alley            1369
+Fence            1179
+MasVnrType        872
+FireplaceQu       690
+LotFrontage       259
+GarageQual         81
+GarageFinish       81
+GarageType         81
+GarageYrBlt        81
+GarageCond         81
+BsmtFinType2       38
+BsmtExposure       38
+BsmtCond           37
+BsmtQual           37
+BsmtFinType1       37
+MasVnrArea          8
+Electrical          1
+Condition2          0
+BldgType            0
+Neighborhood        0
+LandSlope           0
+LotConfig           0
+Condition1          0
+LandContour         0
+LotShape            0
+Street              0
+LotArea             0
+MSSubClass          0
+MSZoning            0
+Id                  0
+Utilities           0
+HouseStyle          0
+Foundation          0
+ExterQual           0
+ExterCond           0
+BsmtUnfSF           0
+TotalBsmtSF         0
+Heating             0
+BsmtFinSF1          0
+Exterior2nd         0
+Exterior1st         0
+RoofMatl            0
+RoofStyle           0
+YearRemodAdd        0
+OverallQual         0
+YearBuilt           0
+OverallCond         0
+BsmtHalfBath        0
+BsmtFullBath        0
+GrLivArea           0
+LowQualFinSF        0
+2ndFlrSF            0
+1stFlrSF            0
+CentralAir          0
+HeatingQC           0
+BsmtFinSF2          0
+Fireplaces          0
+TotRmsAbvGrd        0
+KitchenQual         0
+KitchenAbvGr        0
+Functional          0
+FullBath            0
+HalfBath            0
+GarageCars          0
+GarageArea          0
+BedroomAbvGr        0
+PavedDrive          0
+EnclosedPorch       0
+3SsnPorch           0
+OpenPorchSF         0
+WoodDeckSF          0
+PoolArea            0
+ScreenPorch         0
+MiscVal             0
+MoSold              0
+YrSold              0
+SaleType            0
+SaleCondition       0
+SalePrice           0
+dtype: int64</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#.isnull(): Identifica o que é nulo.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#.sum(): Soma os valorees or coluna.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#sort_values(ascending=False): Ordena os valores do maior para o menor.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Porcentagem dos NAs</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>(dados_train.isnull().<span class="bu">sum</span>() <span class="op">/</span> <span class="bu">len</span>(dados_train) <span class="op">*</span> <span class="dv">100</span>).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>PoolQC           99.520548
+MiscFeature      96.301370
+Alley            93.767123
+Fence            80.753425
+MasVnrType       59.726027
+FireplaceQu      47.260274
+LotFrontage      17.739726
+GarageQual        5.547945
+GarageFinish      5.547945
+GarageType        5.547945
+GarageYrBlt       5.547945
+GarageCond        5.547945
+BsmtFinType2      2.602740
+BsmtExposure      2.602740
+BsmtCond          2.534247
+BsmtQual          2.534247
+BsmtFinType1      2.534247
+MasVnrArea        0.547945
+Electrical        0.068493
+Condition2        0.000000
+BldgType          0.000000
+Neighborhood      0.000000
+LandSlope         0.000000
+LotConfig         0.000000
+Condition1        0.000000
+LandContour       0.000000
+LotShape          0.000000
+Street            0.000000
+LotArea           0.000000
+MSSubClass        0.000000
+MSZoning          0.000000
+Id                0.000000
+Utilities         0.000000
+HouseStyle        0.000000
+Foundation        0.000000
+ExterQual         0.000000
+ExterCond         0.000000
+BsmtUnfSF         0.000000
+TotalBsmtSF       0.000000
+Heating           0.000000
+BsmtFinSF1        0.000000
+Exterior2nd       0.000000
+Exterior1st       0.000000
+RoofMatl          0.000000
+RoofStyle         0.000000
+YearRemodAdd      0.000000
+OverallQual       0.000000
+YearBuilt         0.000000
+OverallCond       0.000000
+BsmtHalfBath      0.000000
+BsmtFullBath      0.000000
+GrLivArea         0.000000
+LowQualFinSF      0.000000
+2ndFlrSF          0.000000
+1stFlrSF          0.000000
+CentralAir        0.000000
+HeatingQC         0.000000
+BsmtFinSF2        0.000000
+Fireplaces        0.000000
+TotRmsAbvGrd      0.000000
+KitchenQual       0.000000
+KitchenAbvGr      0.000000
+Functional        0.000000
+FullBath          0.000000
+HalfBath          0.000000
+GarageCars        0.000000
+GarageArea        0.000000
+BedroomAbvGr      0.000000
+PavedDrive        0.000000
+EnclosedPorch     0.000000
+3SsnPorch         0.000000
+OpenPorchSF       0.000000
+WoodDeckSF        0.000000
+PoolArea          0.000000
+ScreenPorch       0.000000
+MiscVal           0.000000
+MoSold            0.000000
+YrSold            0.000000
+SaleType          0.000000
+SaleCondition     0.000000
+SalePrice         0.000000
+dtype: float64</code></pre>
+</div>
+</div>
+<p>PoolQC (Qualidade da piscina) = 99.520548% NONE</p>
+<p>MiscFeature (Recursos Extras / Diversos) = 96.301370% NONE</p>
+<p>Alley (Beco ou Vielas de acesso) = 93.767123% NONE</p>
+<p>Fence (Cerca) = 80.753425% NONE</p>
+<p>MasVnrType (Revestimento de Alvenaria) = 59.726027% NONE</p>
+<pre><code>FireplaceQu      47.260274
+LotFrontage      17.739726
+GarageQual        5.547945
+GarageFinish      5.547945
+GarageType        5.547945
+GarageYrBlt       5.547945
+GarageCond        5.547945
+BsmtFinType2      2.602740
+BsmtExposure      2.602740
+BsmtCond          2.534247
+BsmtQual          2.534247
+BsmtFinType1      2.534247
+MasVnrArea        0.547945
+Electrical        0.068493</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Para não bagunçar o Dataset original</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dados_copia<span class="op">=</span>dados_train.copy()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar col qualitativas (object e category)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>qualitativas<span class="op">=</span>dados_copia.select_dtypes(include<span class="op">=</span>[<span class="st">"object"</span>,<span class="st">"category"</span>,<span class="st">"string"</span>]).columns</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar col quantitativas (int,float)</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>quantitativas<span class="op">=</span>dados_copia.select_dtypes(include<span class="op">=</span>[<span class="st">"int64"</span>,<span class="st">"float64"</span>]).columns</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Preencher "None" nas colunas qualitativas com NAs</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>dados_copia[qualitativas]<span class="op">=</span>dados_copia[qualitativas].fillna(<span class="st">"None"</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Preenche "0" nas colunas quantitativas com NAs</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>dados_copia[quantitativas]<span class="op">=</span>dados_copia[quantitativas].fillna(<span class="dv">0</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>exit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Use exit() or Ctrl-D (i.e. EOF) to exit</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Não há um view que preste em Python! Logo,...</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Anexando pacote: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Os seguintes objetos são mascarados por 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Os seguintes objetos são mascarados por 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Puxa os dados do Python como se fosse R</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dados_r<span class="ot">&lt;-</span>py<span class="sc">$</span>dados_copia</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificando a tabela</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(dados_r)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="tratamento-de-outliers" class="level4">
+<h4 class="anchored" data-anchor-id="tratamento-de-outliers">4.2 Tratamento de outliers</h4>
+</section>
+<section id="transformações" class="level4">
+<h4 class="anchored" data-anchor-id="transformações">4.3 Transformações</h4>
+</section>
+</section>
+<section id="estatística-descritiva" class="level3">
+<h3 class="anchored" data-anchor-id="estatística-descritiva">5. Estatística Descritiva</h3>
+<section id="tabelas" class="level4">
+<h4 class="anchored" data-anchor-id="tabelas">5.1 Tabelas</h4>
+<p>Para análise inicial escolhemos a variável resposta, Preço de Venda (SalePrice), o tamanho do lote em pés quadrados (LotArea), a capacidade de carros na garagem (GarageCars), e a quantidade de quartos (BedroomAbvGr).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selencionando algumas variáveis para análise descritiva inicial</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>variaveis_primeira_analise<span class="op">=</span>[<span class="st">"SalePrice"</span>,<span class="st">"LotArea"</span>,<span class="st">"GarageCars"</span>,<span class="st">"BedroomAbvGr"</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando um dicionário para armazenar as estatísticas</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>estatisticas<span class="op">=</span>{</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Média"</span>:dados_train[variaveis_primeira_analise].mean(),</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mediana"</span>:dados_train[variaveis_primeira_analise].median(),</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Desvio Padrão"</span>:dados_train[variaveis_primeira_analise].std()</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando o DataFrame</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>tabela_descritiva<span class="op">=</span>pd.DataFrame(estatisticas)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tabela_descritiva)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      Média   Mediana  Desvio Padrão
+SalePrice     180921.195890  163000.0   79442.502883
+LotArea        10516.828082    9478.5    9981.264932
+GarageCars         1.767123       2.0       0.747315
+BedroomAbvGr       2.866438       3.0       0.815778</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculando o coeficiente de variação</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># CV%=(dp/média)*100</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando nova coluna</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>tabela_descritiva[<span class="st">"CV(%)"</span>]<span class="op">=</span>(tabela_descritiva[<span class="st">"Desvio Padrão"</span>]<span class="op">/</span>tabela_descritiva[<span class="st">"Média"</span>])<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Arredondando p/2 casa decimais</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>tabela_descritiva<span class="op">=</span>tabela_descritiva.<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tabela_descritiva)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Média   Mediana  Desvio Padrão  CV(%)
+SalePrice     180921.20  163000.0       79442.50  43.91
+LotArea        10516.83    9478.5        9981.26  94.91
+GarageCars         1.77       2.0           0.75  42.29
+BedroomAbvGr       2.87       3.0           0.82  28.46</code></pre>
+</div>
+</div>
+<ul>
+<li><p>média</p></li>
+<li><p>mediana</p></li>
+<li><p>dp</p></li>
+<li><p>CV (%)</p></li>
+</ul>
+</section>
+<section id="gráficos" class="level4">
+<h4 class="anchored" data-anchor-id="gráficos">5.2 Gráficos</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurando o estilo dos gráficos</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">#whitegrid: Fundo br c/line de grades</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Colocar os 3 graphics lado a lado</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#fig,axes=plt.subplots(1,3,figsize=(18,5))</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.subplots: Vários graphics em uma mesma img.</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.subplots(line,col,tamanhoDaFigura=(largura,altura))</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">#fig:Retorne figura</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">#axes: array c/3 subplots</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando o Histograma</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>)) <span class="co"># Define o tamanho desta janela específica</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>sns.histplot(dados_train[<span class="st">'SalePrice'</span>], kde<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'skyblue'</span>)</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Histograma de SalePrice'</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Preço de Venda ($)'</span>)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequência'</span>)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>plt.show() <span class="co"># Fecha a janela atual e exibe o gráfico</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="house_prices_2026jun06_python_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Densidade</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>)) </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(dados_train[<span class="st">'SalePrice'</span>], fill<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'purple'</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Gráfico de Densidade de SalePrice'</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Preço de Venda ($)'</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Densidade'</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="house_prices_2026jun06_python_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>)) <span class="co"># Um pouco mais estreito porque boxplot vertical fica melhor assim</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(y<span class="op">=</span>dados_train[<span class="st">'SalePrice'</span>], color<span class="op">=</span><span class="st">'lightgreen'</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Boxplot de SalePrice'</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Preço de Venda ($)'</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="house_prices_2026jun06_python_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="histograma" class="level4">
+<h4 class="anchored" data-anchor-id="histograma">- histograma</h4>
+<ul>
+<li><p>boxplot</p></li>
+<li><p>densidade</p></li>
+</ul>
+</section>
+</section>
+<section id="análise-exploratória" class="level3">
+<h3 class="anchored" data-anchor-id="análise-exploratória">6. Análise exploratória</h3>
+</section>
+<section id="modelagem-estatística" class="level3">
+<h3 class="anchored" data-anchor-id="modelagem-estatística">7. Modelagem estatística</h3>
+</section>
+<section id="diagnóstico-do-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="diagnóstico-do-modelo">8. Diagnóstico do modelo</h3>
+</section>
+<section id="seleção-do-melhor-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="seleção-do-melhor-modelo">9. Seleção do melhor modelo</h3>
+</section>
+<section id="discursão-dos-resultados" class="level3">
+<h3 class="anchored" data-anchor-id="discursão-dos-resultados">10. Discursão dos resultados</h3>
+</section>
+<section id="conclusões" class="level3">
+<h3 class="anchored" data-anchor-id="conclusões">11. Conclusões</h3>
+</section>
+<section id="referências" class="level3">
+<h3 class="anchored" data-anchor-id="referências">12. Referências</h3>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
