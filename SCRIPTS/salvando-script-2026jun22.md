@@ -1,0 +1,399 @@
+---
+title: "House Prices - kaggle"
+author:
+  - name: "*Ana Maria F Costa*"
+  - name: "*Eduarda da Silva Brito*"
+  - name: "*Maria Helena Ramos de Macedo*"
+format:
+  html:
+    toc: true #Cria um sumário
+    code-fold: true #Esconde o código, mas vê se clicar
+execute:
+  echo: true
+---
+
+1. Introdução e contextualização do problema
+
+1.1 Objetivo geral
+
+Analisar os fatores determinantes na precificação de imóveis residenciais utilizando modelagem estatística, a fim de ajudar as imobiliarias a determinar os preços dos imóveis.
+
+1.2 Objetivo específico
+
+Identificar e quantificar a relação entre a área construída e o preço de venda.
+
+Avaliar o impacto da localização e da proximidade do centro no valor dos imóveis.
+
+Desenvolver um modelo de regressão linear múltiplo com alto poder explicativo e diagnosticar suas suposições.
+
+2. Fundamentação Teórica
+
+2.1 Regressão Linear Múltipla
+
+2.2 Precificação Hedônica
+
+3. Descrição da base de dados
+
+SalePrice (Preço de Venda) - the property's sale price in dollars. This is the target variable that you're trying to predict. (o preço de venda do imóvel em dólares. Esta é a variável alvo que você está tentando prever.)
+
+MSSubClass: The building class (Classe do edifício)
+
+MSZoning: The general zoning classification (Classificação geral de zoneamento)
+
+LotFrontage: Linear feet of street connected to property (Metros lineares de rua conectados à propriedade)
+
+LotArea: Lot size in square feet (Tamonho do lote em pés quadrados)
+
+Street: Type of road access (Tipo de acesso viário)
+
+Alley: Type of alley access (Tipo de acesso por viela)
+
+LotShape: General shape of property (Formato geral da propriedade)
+
+LandContour: Flatness of the property (Planicidade da propriedade)
+
+Utilities: Type of utilities available (Tipo de serviços públicos disponíveis)
+
+LotConfig: Lot configuration (Configuração do lote)
+
+LandSlope: Slope of property (Inclinação da propriedade)
+
+Neighborhood: Physical locations within Ames city limits (Localização física dentro dos limites da cidade de Ames)
+
+Condition1: Proximity to main road or railroad (Proximidade à estrada principal ou ferrovia)
+
+Condition2: Proximity to main road or railroad (if a second is present) (Proximidade à estrada principal ou ferrovia - se houver uma segunda)
+
+BldgType: Type of dwelling (Tipo de residência)
+
+HouseStyle: Style of dwelling (Estilo de residência)
+
+OverallQual: Overall material and finish quality (Qualidade geral do material e acabamento)
+
+OverallCond: Overall condition rating (Classificação geral da condição)
+
+YearBuilt: Original construction date (Data de construção original)
+
+YearRemodAdd: Remodel date (Data da última reforma)
+
+RoofStyle: Type of roof (Tipo de telhado)
+
+RoofMatl: Roof material (Material do telhado)
+
+Exterior1st: Exterior covering on house (Revestimento externo da casa)
+
+Exterior2nd: Exterior covering on house (if more than one material) (Rev ext da casa se houver mais de um material)
+
+MasVnrType: Masonry veneer type (Tipo de revestimento de alvenaria)
+
+MasVnrArea: Masonry veneer area in square feet (Área de revestimento de alvenaria em pés quadrados)
+
+ExterQual: Exterior material quality (Qualidade do material externo)
+
+ExterCond: Present condition of the material on the exterior (Condição atual do material no exterior)
+
+Foundation: Type of foundation (Tipo de fundação)
+
+BsmtQual: Height of the basement (Altura do porão)
+
+BsmtCond: General condition of the basement (Condição geral do porão)
+
+BsmtExposure: Walkout or garden level basement walls (Paredes do porão com saída para o jardim ou nível do jardim)
+
+BsmtFinType1: Quality of basement finished area (Qualidade da área acabada do porão)
+
+BsmtFinSF1: Type 1 finished square feet (Área acabada do tipo 1 em pés quadrados)
+
+BsmtFinType2: Quality of second finished area (if present) (Qualidade da segunda área acabada - se houver)
+
+BsmtFinSF2: Type 2 finished square feet (Área acabada do tipo 2 em pés quadrados)
+
+BsmtUnfSF: Unfinished square feet of basement area (Área inacabada do porão em pés quadrados)
+
+TotalBsmtSF: Total square feet of basement area (Área total do porão em pés quadrados)
+
+Heating: Type of heating (Tipo de aquecimento)
+
+HeatingQC: Heating quality and condition (Qualidade e condição do aquecimento)
+
+CentralAir: Central air conditioning (Ar condicionado central)
+
+Electrical: Electrical system (Sistema elétrico)
+
+1stFlrSF: First Floor square feet (Área do primeiro andar)
+
+2ndFlrSF: Second floor square feet (Área do segunda andar)
+
+LowQualFinSF: Low quality finished square feet (all floors) (Área acabada de baia qualidade - todos os andares)
+
+GrLivArea: Above grade (ground) living area square feet (Área habitável acima do nível do solo)
+
+BsmtFullBath: Basement full bathrooms (Banheiros completos no subsolo)
+
+BsmtHalfBath: Basement half bathrooms (Lavabos no subsolo)
+
+FullBath: Full bathrooms above grade (Banheiros completos acima do nível do solo)
+
+HalfBath: Half baths above grade (Lavabos acima do nível do solo)
+
+Bedroom: Number of bedrooms above basement level (Número de quartos acima do nível do solo)
+
+Kitchen: Number of kitchens (Números de cozinhas)
+
+KitchenQual: Kitchen quality (Qualidade da cozinha)
+
+TotRmsAbvGrd: Total rooms above grade (does not include bathrooms) (Total de cômodos acima do nível do solo - NÃO inclui banheiros)
+
+Functional: Home functionality rating (Classificação da funcionalidade da casa)
+
+Fireplaces: Number of fireplaces (Lareiras)
+
+FireplaceQu: Fireplace quality (Qualidade da lareira)
+
+GarageType: Garage location (Localização da garagem)
+
+GarageYrBlt: Year garage was built (Ano de construção da garagem)
+
+GarageFinish: Interior finish of the garage (Acabamento interno da garagem)
+
+GarageCars: Size of garage in car capacity (Tamanho da garagem em carros - capacidade)
+
+GarageArea: Size of garage in square feet (Tamanho da garagem em pés quadrados)
+
+GarageQual: Garage quality (Qualidade da garagem)
+
+GarageCond: Garage condition (Condição da garagem)
+
+PavedDrive: Paved driveway (Entrada pavimentada)
+
+WoodDeckSF: Wood deck area in square feet (Área do deck de madeira em pés quadrados)
+
+OpenPorchSF: Open porch area in square feet (Área da varanda aberta em pés quadrados)
+
+EnclosedPorch: Enclosed porch area in square feet (Área da varanda fechada em pés quadrados)
+
+3SsnPorch: Three season porch area in square feet (Área da varanda de três estações em pés quadrados)
+
+ScreenPorch: Screen porch area in square feet (Área da varanda telada em pés quadrados )
+
+PoolArea: Pool area in square feet (Área da piscina em pés quadrados)
+
+PoolQC: Pool quality (Qualidade da piscina)
+
+Fence: Fence quality (Qualidade da cerca)
+
+MiscFeature: Miscellaneous feature not covered in other categories (Característica diversa não coberta em outras categorias)
+
+MiscVal: $Value of miscellaneous feature (Valor da característica diversa)
+
+MoSold: Month Sold (Mês da venda)
+
+YrSold: Year Sold (Ano da venda)
+
+SaleType: Type of sale (Tipo de venda)
+
+SaleCondition: Condition of sale (Condição da venda)
+
+4. Preparação dos dados
+
+{r}
+# Instalando o ambiente Python
+# Depois disso dá para misturar o R com o Python
+library(reticulate)
+reticulate::py_install("ipython")
+repl_python()
+
+4.1 Dados faltantes
+
+Aqui os dados com NAs são dados onde a casa não tem garagem, ou cerca, ou piscina. Não são dados incompletos. Logo, não se usa o ajuste substituindo os dados pela média ou mediana. Mas substituindo NA por "None" em variáveis categóricas. E NA por 0, em variáveis numéricas.
+
+{python}
+# Carregando as bibliotecas ...
+import numpy as np
+import pandas as pd
+from IPython.display import display
+
+# Carregando o dataset ...
+dados_train=pd.read_csv("/home/delfos/Documentos/UEPB_20260326/PEDRO_MONTEIRO/CONSULTANCY/CONSULTANCY_PROJECTS/HOUSE_PRICES_PROJECT/DATA/house-prices-advanced-regression-techniques/train.csv")
+
+# Zoiando
+dados_train.head()  #5 primeiras linhas
+
+# Para vê os tipos de dados e se há valores nulos
+dados_train.info()
+
+# Mudando a config p/exibir TODAS as linhas da tabela/série. O pandas esconde com "..."
+pd.set_option("display.max_rows",None)
+
+# Contando quantos NAs
+dados_train.isnull().sum().sort_values(ascending=False)
+#.isnull(): Identifica o que é nulo.
+#.sum(): Soma os valorees or coluna.
+#sort_values(ascending=False): Ordena os valores do maior para o menor.
+
+# Porcentagem dos NAs
+(dados_train.isnull().sum() / len(dados_train) * 100).sort_values(ascending=False)
+
+PoolQC (Qualidade da piscina) = 99.520548% NONE
+
+MiscFeature (Recursos Extras / Diversos) = 96.301370% NONE
+
+Alley (Beco ou Vielas de acesso) = 93.767123% NONE
+
+Fence (Cerca) = 80.753425% NONE
+
+MasVnrType (Revestimento de Alvenaria) = 59.726027% NONE
+
+FireplaceQu      47.260274
+LotFrontage      17.739726
+GarageQual        5.547945
+GarageFinish      5.547945
+GarageType        5.547945
+GarageYrBlt       5.547945
+GarageCond        5.547945
+BsmtFinType2      2.602740
+BsmtExposure      2.602740
+BsmtCond          2.534247
+BsmtQual          2.534247
+BsmtFinType1      2.534247
+MasVnrArea        0.547945
+Electrical        0.068493
+
+{python}
+# Para não bagunçar o Dataset original
+dados_copia=dados_train.copy()
+
+# Identificar col qualitativas (object e category)
+qualitativas=dados_copia.select_dtypes(include=["object","category","string"]).columns
+
+# Identificar col quantitativas (int,float)
+quantitativas=dados_copia.select_dtypes(include=["int64","float64"]).columns
+
+# Preencher "None" nas colunas qualitativas com NAs
+dados_copia[qualitativas]=dados_copia[qualitativas].fillna("None")
+
+# Preenche "0" nas colunas quantitativas com NAs
+dados_copia[quantitativas]=dados_copia[quantitativas].fillna(0)
+
+exit
+
+{r}
+#Não há um view que preste em Python! Logo,...
+library(dplyr)
+
+# Puxa os dados do Python como se fosse R
+dados_r<-py$dados_copia
+
+# Verificando a tabela
+View(dados_r)
+
+4.2 Tratamento de outliers
+
+4.3 Transformações
+
+5. Estatística Descritiva
+
+5.1 Tabelas
+
+Para análise inicial escolhemos a variável resposta, Preço de Venda (SalePrice), o tamanho do lote em pés quadrados (LotArea), a capacidade de carros na garagem (GarageCars), e a quantidade de quartos (BedroomAbvGr).
+
+{python}
+# Selencionando algumas variáveis para análise descritiva inicial
+
+variaveis_primeira_analise=["SalePrice","LotArea","GarageCars","BedroomAbvGr"]
+
+# Criando um dicionário para armazenar as estatísticas
+
+estatisticas={
+  "Média":dados_copia[variaveis_primeira_analise].mean(),
+  "Mediana":dados_copia[variaveis_primeira_analise].median(),
+  "Desvio Padrão":dados_copia[variaveis_primeira_analise].std()
+}
+
+# Criando o DataFrame
+tabela_descritiva=pd.DataFrame(estatisticas)
+print(tabela_descritiva)
+
+# Calculando o coeficiente de variação
+# CV%=(dp/média)*100
+# Criando nova coluna
+tabela_descritiva["CV(%)"]=(tabela_descritiva["Desvio Padrão"]/tabela_descritiva["Média"])*100
+
+# Arredondando p/2 casa decimais
+tabela_descritiva=tabela_descritiva.round(2)
+print(tabela_descritiva)
+
+
+média
+
+mediana
+
+dp
+
+CV (%)
+
+5.2 Gráficos
+
+{python}
+# Design
+import seaborn as sns
+# Cria a estrutura do gráfico.
+import matplotlib.pyplot as plt
+
+# Configurando o estilo dos gráficos
+sns.set_theme(style="whitegrid")
+#whitegrid: Fundo br c/line de grades
+
+# Colocar os 3 graphics lado a lado
+#fig,axes=plt.subplots(1,3,figsize=(18,5))
+#plt.subplots: Vários graphics em uma mesma img.
+#plt.subplots(line,col,tamanhoDaFigura=(largura,altura))
+#fig:Retorne figura
+#axes: array c/3 subplots
+
+# Criando o Histograma
+plt.figure(figsize=(8, 5)) # Define o tamanho desta janela específica
+sns.histplot(dados_copia['SalePrice'], kde=False, color='skyblue')
+plt.title('Histograma de SalePrice')
+plt.xlabel('Preço de Venda ($)')
+plt.ylabel('Frequência')
+plt.show() # Fecha a janela atual e exibe o gráfico
+
+# Densidade
+plt.figure(figsize=(8, 5))
+sns.kdeplot(dados_copia['SalePrice'], fill=True, color='purple')
+plt.title('Gráfico de Densidade de SalePrice')
+plt.xlabel('Preço de Venda ($)')
+plt.ylabel('Densidade')
+plt.tight_layout()
+plt.show()
+
+# Boxplot
+plt.figure(figsize=(6, 5)) # Um pouco mais estreito porque boxplot vertical fica melhor assim
+sns.boxplot(y=dados_copia['SalePrice'], color='lightgreen')
+plt.title('Boxplot de SalePrice')
+plt.ylabel('Preço de Venda ($)')
+plt.show()
+
+
+
+- histograma
+
+boxplot
+
+densidade
+
+6. Análise exploratória
+
+7. Modelagem estatística
+
+8. Diagnóstico do modelo
+
+9. Seleção do melhor modelo
+
+10. Discursão dos resultados
+
+11. Conclusões
+
+12. Referências
+
