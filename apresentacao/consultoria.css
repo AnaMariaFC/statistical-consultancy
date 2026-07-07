@@ -1,0 +1,136 @@
+/* =====================================================
+   CONSULTORIA ESTATÍSTICA - TEMA APRESENTAÇÃO
+===================================================== */
+
+.reveal {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+/* Títulos */
+.reveal h1,
+.reveal h2 {
+  color: #0F3D66;
+  font-weight: 700;
+}
+
+.reveal h1 {
+  font-size: 2em;
+}
+
+.reveal h2 {
+  font-size: 1.55em;
+  border-bottom: 3px solid #D9A441;
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+}
+
+/* Remove linha da capa */
+.capa-slide h2 {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Texto */
+.reveal p,
+.reveal li {
+  font-size: 0.8em;
+  line-height: 1.35;
+  color: #333333;
+}
+
+.reveal strong {
+  color: #0F3D66;
+}
+
+/* Caixa azul clara */
+.caixa {
+  background-color: #F4F8FC;
+  border-left: 6px solid #2F80ED;
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin-top: 18px;
+}
+
+/* Caixa azul escura */
+.caixa-azul {
+  background-color: #0F3D66;
+  color: white;
+  padding: 22px;
+  border-radius: 10px;
+  margin-top: 18px;
+}
+
+.caixa-azul p,
+.caixa-azul li,
+.caixa-azul strong {
+  color: white;
+}
+
+/* Cards */
+.card {
+  flex: 1;
+  background-color: #F5F7FA;
+  border-top: none;
+  border-radius: 12px;
+  padding: 20px 14px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* Remove qualquer linha herdada dentro dos cards */
+.card h1,
+.card h2,
+.card h3 {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 8px !important;
+  color: #0F3D66;
+}
+
+.card p {
+  font-size: 0.72em;
+  line-height: 1.3;
+  margin: 6px 0;
+}
+
+/* Tabelas */
+.reveal table {
+  width: 90%;
+  margin: auto;
+  font-size: 0.68em;
+  border-collapse: collapse;
+}
+
+.reveal table th {
+  background-color: #0F3D66;
+  color: white;
+  text-align: center;
+}
+
+.reveal table td {
+  text-align: center;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* Imagens e gráficos */
+.reveal img {
+  max-height: 520px;
+  border-radius: 8px;
+}
+
+/* Slide com imagem de capa */
+.slide-capa img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Número do slide */
+.reveal .slide-number {
+  color: #0F3D66;
+  font-size: 13px;
+}
