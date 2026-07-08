@@ -1,0 +1,137 @@
+/* ================================
+   CONFIGURAÇÕES GERAIS
+================================ */
+
+body {
+  text-align: justify;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.8;
+  color: #333333;
+}
+
+/* ================================
+   TÍTULO DO DOCUMENTO
+================================ */
+
+.title {
+  color: #1f4e79;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #555555;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+
+/* Autores */
+
+.quarto-title-meta {
+  margin-top: 15px;
+  margin-bottom: 35px;
+}
+
+/* ================================
+   TÍTULOS DAS SEÇÕES
+================================ */
+
+h1 {
+  color: #1f4e79;
+  border-bottom: 3px solid #1f4e79;
+  padding-bottom: 8px;
+  margin-top: 45px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #2c3e50;
+  border-left: 5px solid #1f4e79;
+  padding-left: 10px;
+  margin-top: 35px;
+}
+
+h3 {
+  color: #34495e;
+  margin-top: 28px;
+}
+
+/* ================================
+   PARÁGRAFOS
+================================ */
+
+p {
+  margin-bottom: 14px;
+}
+
+/* ================================
+   LISTAS
+================================ */
+
+ul li,
+ol li {
+  margin-bottom: 8px;
+}
+
+/* ================================
+   TABELAS
+================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+th {
+  background-color: #1f4e79;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* ================================
+   IMAGENS
+================================ */
+
+img {
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+}
+
+/* ================================
+   CÓDIGOS
+================================ */
+
+pre {
+  border-radius: 8px;
+}
+
+code {
+  font-size: 90%;
+}
+
+/* ================================
+   SUMÁRIO
+================================ */
+
+.sidebar nav {
+  font-size: 15px;
+}
